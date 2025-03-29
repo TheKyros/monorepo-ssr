@@ -17,7 +17,7 @@ spring:
         show-sql: true
         properties:
             hibernate:
-                format_sql: true
+                "[format_sql]": true
                 dialect: org.hibernate.dialect.H2Dialect
     h2:
         console:
@@ -38,5 +38,5 @@ springdoc:
 
 logging:
     level:
-        org.springframework.web: INFO
-        com.example.backend: DEBUG
+        "[org.springframework.web]": INFO
+        "[com.example.backend]": DEBUG
