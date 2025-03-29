@@ -1,0 +1,20 @@
+{
+  "name": "monorepo",
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "frontend:dev": "cd apps/frontend && ng serve",
+    "frontend:build": "cd apps/frontend && ng build",
+    "frontend:test": "cd apps/frontend && ng test",
+    "backend:dev": "cd apps/backend && mvn spring-boot:run",
+    "backend:test": "cd apps/backend && mvn test",
+    "dev": "concurrently \"npm run frontend:dev\" \"npm run backend:dev\"",
+    "build": "npm run frontend:build && cd apps/backend && mvn clean package",
+    "test": "concurrently \"npm run frontend:test\" \"npm run backend:test\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

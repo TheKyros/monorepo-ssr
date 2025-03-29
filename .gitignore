@@ -1,0 +1,103 @@
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+target/
+bin/
+build/
+out/
+.gradle/
+build/
+*.class
+*.jar
+*.war
+
+# IDE and editor files
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+*.swp
+*.swo
+.DS_Store
+*.iml
+*.iws
+*.ipr
+
+# Logs
+logs/
+*.log
+*.log.*
+libpeerconnection.log
+testem.log
+
+# Testing
+coverage/
+test-output/
+reports/
+/typings
+
+# Temporary files
+tmp/
+temp/
+.tmp/
+.temp/
+/connect.lock
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional REPL history
+.node_repl_history
+
+# Angular specific
+.angular/
+.angular-cache/
+.angular-cli.json
+/.angular/cache
+.sass-cache/
+
+# Java specific
+*.class
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+hs_err_pid*
+replay_pid*
+
+# Maven specific
+.mvn/
+mvnw
+mvnw.cmd
+
+# System files
+Thumbs.db

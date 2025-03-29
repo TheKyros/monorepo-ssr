@@ -1,0 +1,47 @@
+<div class="container">
+  <h2>Examples</h2>
+
+  <div *ngIf="loading" class="loading">Loading...</div>
+
+  <div *ngIf="error" class="error">
+    {{ error }}
+  </div>
+
+  <div *ngIf="!loading && !error" class="content">
+    <button class="btn btn-primary mb-3" routerLink="/examples/new">
+      Create New Example
+    </button>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let example of examples">
+          <td>{{ example.id }}</td>
+          <td>{{ example.name }}</td>
+          <td>{{ example.description }}</td>
+          <td>
+            <button
+              class="btn btn-sm btn-info me-2"
+              [routerLink]="['/examples', example.id, 'edit']"
+            >
+              Edit
+            </button>
+            <button
+              class="btn btn-sm btn-danger"
+              (click)="deleteExample(example.id!)"
+            >
+              Delete
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
