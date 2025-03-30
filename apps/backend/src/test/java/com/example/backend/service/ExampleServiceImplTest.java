@@ -1,13 +1,16 @@
 package com.example.backend.service;
 
-import com.example.backend.dto.CreateExampleRequest;
+import com.example.backend.dto.CreateOrUpdateExampleRequest;
+import com.example.backend.mapper.ExampleMapper;
 import com.example.backend.model.Example;
 import com.example.backend.repository.ExampleRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mapstruct.factory.Mappers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
@@ -24,13 +27,16 @@ class ExampleServiceTest {
     @Mock
     private ExampleRepository exampleRepository;
 
-    @InjectMocks
+    private ExampleMapper exampleMapper;
+
     private ExampleService exampleService;
 
     private Example testExample;
 
     @BeforeEach
     void setUp() {
+        exampleMapper = Mappers.getMapper(ExampleMapper.class);
+        exampleService = new ExampleService(exampleRepository, exampleMapper);
         testExample = new Example();
         testExample.setId(1L);
         testExample.setName("Test Example");
@@ -71,7 +77,7 @@ class ExampleServiceTest {
 
     @Test
     void create_ShouldCreateAndReturnExample() {
-        CreateExampleRequest request = new CreateExampleRequest("New Example", "New Description");
+        CreateOrUpdateExampleRequest request = new CreateOrUpdateExampleRequest("New Example", "New Description");
 
         when(exampleRepository.save(any(Example.class))).thenReturn(testExample);
 

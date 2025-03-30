@@ -1,6 +1,6 @@
 package com.example.backend.controller;
 
-import com.example.backend.dto.CreateExampleRequest;
+import com.example.backend.dto.CreateOrUpdateExampleRequest;
 import com.example.backend.model.Example;
 import com.example.backend.service.ExampleService;
 import org.junit.jupiter.api.BeforeEach;
@@ -70,12 +70,12 @@ class ExampleControllerTest {
 
     @Test
     void createExample_ShouldReturnCreatedExample() throws Exception {
-        when(exampleService.create(any(CreateExampleRequest.class))).thenReturn(testExample);
+        when(exampleService.create(any(CreateOrUpdateExampleRequest.class))).thenReturn(testExample);
 
         mockMvc.perform(post("/examples")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"name\":\"New Example\",\"description\":\"New Description\"}"))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.name").value("Test Example"))
                 .andExpect(jsonPath("$.description").value("Test Description"));
@@ -84,7 +84,7 @@ class ExampleControllerTest {
     @Test
     void updateExample_WhenExampleExists_ShouldReturnUpdatedExample() throws Exception {
         when(exampleService.findById(1L)).thenReturn(Optional.of(testExample));
-        when(exampleService.save(any(Example.class))).thenReturn(testExample);
+        when(exampleService.update(any(Long.class), any(CreateOrUpdateExampleRequest.class))).thenReturn(testExample);
 
         mockMvc.perform(put("/examples/1")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -110,7 +110,7 @@ class ExampleControllerTest {
         when(exampleService.findById(1L)).thenReturn(Optional.of(testExample));
 
         mockMvc.perform(delete("/examples/1"))
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
     }
 
     @Test

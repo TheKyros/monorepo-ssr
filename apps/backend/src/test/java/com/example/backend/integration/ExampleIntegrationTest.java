@@ -1,6 +1,6 @@
 package com.example.backend.integration;
 
-import com.example.backend.dto.CreateExampleRequest;
+import com.example.backend.dto.CreateOrUpdateExampleRequest;
 import com.example.backend.model.Example;
 import com.example.backend.repository.ExampleRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -37,13 +37,15 @@ class ExampleIntegrationTest {
     @Test
     void createAndRetrieveExample_ShouldWork() throws Exception {
         // Create example
-        CreateExampleRequest request = new CreateExampleRequest("Integration Test Example",
-                "Integration Test Description");
+        CreateOrUpdateExampleRequest request = CreateOrUpdateExampleRequest.builder()
+                .name("Integration Test Example")
+                .description("Integration Test Description")
+                .build();
 
         String response = mockMvc.perform(post("/examples")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name").value("Integration Test Example"))
                 .andExpect(jsonPath("$.description").value("Integration Test Description"))
                 .andReturn()
@@ -65,12 +67,15 @@ class ExampleIntegrationTest {
     @Test
     void updateExample_ShouldWork() throws Exception {
         // Create initial example
-        CreateExampleRequest createRequest = new CreateExampleRequest("Initial Name", "Initial Description");
+        CreateOrUpdateExampleRequest createRequest = CreateOrUpdateExampleRequest.builder()
+                .name("Initial Name")
+                .description("Initial Description")
+                .build();
 
         String response = mockMvc.perform(post("/examples")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(createRequest)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
@@ -97,12 +102,12 @@ class ExampleIntegrationTest {
     @Test
     void deleteExample_ShouldWork() throws Exception {
         // Create example
-        CreateExampleRequest request = new CreateExampleRequest("To Delete", "Will be deleted");
+        CreateOrUpdateExampleRequest request = new CreateOrUpdateExampleRequest("To Delete", "Will be deleted");
 
         String response = mockMvc.perform(post("/examples")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
@@ -111,7 +116,7 @@ class ExampleIntegrationTest {
 
         // Delete example
         mockMvc.perform(delete("/examples/" + createdExample.getId()))
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
 
         // Verify deletion
         assertThat(exampleRepository.findById(createdExample.getId())).isEmpty();
@@ -120,18 +125,20 @@ class ExampleIntegrationTest {
     @Test
     void getAllExamples_ShouldWork() throws Exception {
         // Create multiple examples
-        CreateExampleRequest request1 = new CreateExampleRequest("First Example", "First Description");
-        CreateExampleRequest request2 = new CreateExampleRequest("Second Example", "Second Description");
+        CreateOrUpdateExampleRequest request1 = new CreateOrUpdateExampleRequest("First Example",
+                "First Description");
+        CreateOrUpdateExampleRequest request2 = new CreateOrUpdateExampleRequest("Second Example",
+                "Second Description");
 
         mockMvc.perform(post("/examples")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request1)))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
 
         mockMvc.perform(post("/examples")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request2)))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
 
         // Retrieve all examples
         mockMvc.perform(get("/examples"))

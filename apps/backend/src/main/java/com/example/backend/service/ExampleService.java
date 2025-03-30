@@ -1,6 +1,7 @@
 package com.example.backend.service;
 
-import com.example.backend.dto.CreateExampleRequest;
+import com.example.backend.dto.CreateOrUpdateExampleRequest;
+import com.example.backend.mapper.ExampleMapper;
 import com.example.backend.model.Example;
 import com.example.backend.repository.ExampleRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ExampleService {
     private final ExampleRepository exampleRepository;
+    private final ExampleMapper exampleMapper;
 
     @Transactional(readOnly = true)
     public List<Example> findAll() {
@@ -26,10 +28,15 @@ public class ExampleService {
     }
 
     @Transactional
-    public Example create(CreateExampleRequest request) {
-        Example example = new Example();
-        example.setName(request.name());
-        example.setDescription(request.description());
+    public Example create(CreateOrUpdateExampleRequest request) {
+        Example example = exampleMapper.toEntity(request);
+        return exampleRepository.save(example);
+    }
+
+    @Transactional
+    public Example update(Long id, CreateOrUpdateExampleRequest request) {
+        Example example = exampleMapper.toEntity(request);
+        example.setId(id);
         return exampleRepository.save(example);
     }
 
